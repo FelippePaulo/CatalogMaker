@@ -15,6 +15,7 @@ const (
   dbname   = "Catalogs-db"
 )
 
+
 // Declare a global variable to hold the database connection
 var DB *sql.DB
 

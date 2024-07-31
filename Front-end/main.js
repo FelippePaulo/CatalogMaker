@@ -14,9 +14,10 @@ function main(){
     submitButton = document.getElementById("postSubmit")
     submitButton.onclick = (event) => {
         event.preventDefault()
-        postData(`http://localhost:8080/catalog`,{
-            item: "item1",
-            item2: "item2"
+        postData(`http://localhost:8080/catalog`, {
+            item1: document.getElementById("input1").value,
+            item2: document.getElementById("input2").value,
+            item3: document.getElementById("input3").value
         })
     }
     
@@ -90,22 +91,24 @@ async function getData(url) {
     }
 }
 
-async function postData(url, obj){
+async function postData(url, obj) {
+    //console.log(JSON.stringify(obj))
     try {
         const response = await fetch(url, {
             method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json' 
+            headers: {
+                'Content-Type': 'text/plain' 
             },
-            body: JSON.stringify(obj) // Certifique-se de incluir o corpo da solicitação
+            body: JSON.stringify(obj) 
         });
 
         if (response.ok) {
             alert('Cadastrado com sucesso.');
         } else {
-            throw new Error('Erro ' + response.status);
+            const errorText = await response.text();
+            throw new Error('Erro ' + response.status + ': ' + errorText);
         }
     } catch (err) {
-        console.error(err);
+        alert(err.message);
     }
 }

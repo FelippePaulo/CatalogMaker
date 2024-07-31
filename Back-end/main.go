@@ -63,13 +63,36 @@ func main() {
 	mux := http.NewServeMux()
 
 	//post handler
-	mux.HandleFunc(`/catalog`, func(w http.ResponseWriter, r *http.Request){
+	mux.HandleFunc(`POST /catalog`, func(w http.ResponseWriter, r *http.Request){
 		w.Header().Set("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers")
 		w.Header().Set("Access-Control-Allow-Origin" , "*")
-		//fmt.Printf(r.ParseForm().Error())
-		fmt.Printf( "POST")
-		fmt.Fprintf(w, "aaaaa")
-		//fmt.Printf(obj)		
+		
+		fmt.Printf("Request Method: %s\n", r.Method)
+		// Ensure this is a POST request
+        if r.Method != http.MethodPost {
+            http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+            return
+        }
+
+        var data map[string]interface{}
+        decoder := json.NewDecoder(r.Body)
+		
+        if err := decoder.Decode(&data); err != nil {
+            http.Error(w, "Failed to decode JSON", http.StatusBadRequest)
+            return
+        }
+		
+		var catalog db.Catalog
+		
+        // Acesse os valores do JSON
+        catalog.Title = data["item1"].(string)
+        catalog.Description = data["item2"].(string)
+		catalog.Imglink = data["item3"].(string)
+
+
+		db.AddCatalog(catalog)
+
+        fmt.Fprintf(w, "Received JSON data")	
 	})
 
 	// catalog list
