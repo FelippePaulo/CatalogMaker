@@ -1,6 +1,11 @@
 // db/repositoryCatalog.go
 package db
 
+import (
+	"fmt"
+
+	//"golang.org/x/text/message/catalog"
+)
 
 // "database/sql"
 // "log"
@@ -13,14 +18,12 @@ type Catalog struct{
 }
 
 func GetCatalogs() ([]Catalog, error) {
-	
-    rows, err := DB.Query("SELECT * FROM catalogs")
+	query := "SELECT * FROM catalogs"
+    rows, err := DB.Query(query)
     if err != nil {
         return nil, err
     }
     defer rows.Close()
-
-	
 
     var catalogs []Catalog
     for rows.Next() {
@@ -38,44 +41,12 @@ func GetCatalogs() ([]Catalog, error) {
     return catalogs, nil
 }
 
-//import "fmt"
-
-//func getAllCatalogs(catalog) {
-	//var catalog Catalog
-
-	// sql := "SELECT * FROM Catalogs"
-	// //fmt.Printf(sql)
-	// row := db.QueryRow(sql)
-	// if err := row.Scan(&catalog.Id, catalog.Title, catalog.Description, catalog.Imglink); err != nil{
-	// 	if err == sql.ErrNoRows{
-	// 		return catalog, fmt.Errorf("fail to load catalogs")
-	// 	}
-	// }
-
-	// sqlStatement := "SELECT * FROM Catalogs"
-	// id := 0
-	// err = db.QueryRow(sqlStatement).Scan(&id)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// fmt.Println("New record ID is:", id)
-
-
-
-	// rows, err := db.DB.Query("SELECT * FROM Catalogs")
-	// if err != nil {
-	// 	log.Fatalf("Query failed: %v", err)
-	// }
-	// defer rows.Close()
-
-	// for rows.Next() {
-		
-	// 	var catalog Catalog
-	// 	if err := rows.Scan(&catalog.Id, &catalog.Title, &catalog.Description, &catalog.Imglink ); err != nil {
-	// 		log.Fatalf("Row scan failed: %v", err)
-	// 	}
-	// 	fmt.Printf("ID: %d, Title: %s, Description: %s, ImgLink: %s\n", catalog.Id, catalog.Title, catalog.Description, catalog.Imglink)
-	// }
-
-
-//}
+func AddCatalog(catalog Catalog){
+	query := "INSERT INTO users (title, description, imglink) VALUES ($1, $2, $3) RETURNING id`"
+	id := 0
+	err := DB.QueryRow(query, catalog.Title, catalog.Description, catalog.Id).Scan(&id)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println("New ID:", id)
+}

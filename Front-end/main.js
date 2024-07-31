@@ -30,6 +30,8 @@ function loadCatalogs(catalog){
     title.innerText = catalog.title
     content = document.createElement("div")
     content.innerText = catalog.description
+    img = document.createElement("div")
+    img.innerText = catalog.imgLink
 
     form = document.createElement("form")
     form.method = "GET"
@@ -44,6 +46,7 @@ function loadCatalogs(catalog){
 
     divCatalog.appendChild(title)
     divCatalog.appendChild(content)
+    divCatalog.appendChild(img)
     divCatalog.appendChild(form)
 
     catalogContainer = document.getElementById("testeFetch")

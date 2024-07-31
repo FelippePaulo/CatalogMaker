@@ -72,6 +72,7 @@ func main() {
 		//fmt.Printf(obj)		
 	})
 
+	// catalog list
 	mux.HandleFunc("GET /catalog", func(w http.ResponseWriter, r *http.Request){
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin" , "*")
