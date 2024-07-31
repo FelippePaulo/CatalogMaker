@@ -28,7 +28,6 @@ func Initialize() error {
         return err
     }
     
-    // Optionally, you can ping the database to check if the connection is alive
     if err = DB.Ping(); err != nil {
         return err
     }

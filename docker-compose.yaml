@@ -7,7 +7,7 @@ services:
     environment:
       - POSTGRES_DB=Catalogos_db
       - POSTGRES_USER=felippe
-      - POSTGRES_PASSWORD=batata12
+      - POSTGRES_PASSWORD=felippe
     ports:
       - 5432:5432
 volumes:

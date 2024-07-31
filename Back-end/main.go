@@ -11,18 +11,6 @@ import (
 	"myproject/db"
 )
 
-type Catalogo struct{
-	Id string `json:"id"`
-	Title string `json:"title"`
-	Content string `json:"content"`
-}
-
-// type Catalog struct{
-// 	Id int `json:"id"`
-// 	Title string `json:"title"`
-// 	Description string `json:"description"`
-// 	Imglink string `json:"imgLink"`
-// }
 
 type Produto struct{
 	Id string `json:"id"`
