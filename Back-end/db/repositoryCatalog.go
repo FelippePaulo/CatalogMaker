@@ -41,7 +41,7 @@ func GetCatalogs() ([]Catalog, error) {
 }
 
 func AddCatalog(catalog Catalog) {
-	fmt.Println(catalog)
+	//fmt.Println(catalog)
 	query := "INSERT INTO catalogs (title, description, imglink) VALUES ($1, $2, $3) RETURNING id"
 	id := 0
 	err := DB.QueryRow(query, catalog.Title, catalog.Description, catalog.Imglink).Scan(&id)
@@ -49,5 +49,8 @@ func AddCatalog(catalog Catalog) {
 		panic(err)
 	}
 	fmt.Println("New ID:", id)
-
 }
+
+// func alterCatalog(catalog Catalog, id int){
+
+// }

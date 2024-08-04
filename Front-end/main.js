@@ -112,3 +112,7 @@ async function postData(url, obj) {
         alert(err.message);
     }
 }
+
+async function updateData(url, obj){
+    
+}

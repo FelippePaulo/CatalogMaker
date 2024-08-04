@@ -1,0 +1,13 @@
+CREATE TABLE Catalogs (
+	id SERIAL PRIMARY KEY,
+	title varchar(255),
+	description TEXT,
+	imgLink TEXT
+);
+
+
+// teste
+insert into Catalogs (title, description, imgLink)
+Values ('catalogo teste 1', 'descricao catalogo teste 1', 'link img catalogo 1'),
+('catalogo teste 2', 'descricao catalogo teste 2', 'link img catalogo 2'),
+('catalogo teste 3', 'descricao catalogo teste 3', 'link img catalogo 3');
