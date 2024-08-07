@@ -20,11 +20,23 @@ function main(){
             item3: document.getElementById("input3").value
         })
     }
+
+    //teste put
+    changeButton = document.getElementById("putSubmit")
+    changeButton.onclick = (event) => {
+        event.preventDefault()
+        updateData(`http://localhost:8080/catalog`,document.getElementById("input0Put").value, {
+            
+            item1: document.getElementById("input1Put").value,
+            item2: document.getElementById("input2Put").value,
+            item3: document.getElementById("input3Put").value
+        })
+    }
     
 }
 
 function loadCatalogs(catalog){
-    console.log(catalog)
+    //console.log(catalog)
     divCatalog = document.createElement("div")
     divCatalog.classList.add("catalog")
     title = document.createElement("div")
@@ -44,6 +56,14 @@ function loadCatalogs(catalog){
         loadProducts(catalog.id)
     }
     form.appendChild(button)
+
+    deleteButton = document.createElement("button")
+    deleteButton.innerText = "Excluir"
+    deleteButton.onclick = (e) => {
+        e.preventDefault()
+        deleteData('http://localhost:8080/catalog',catalog.id)
+    }
+    form.appendChild(deleteButton)
 
     divCatalog.appendChild(title)
     divCatalog.appendChild(content)
@@ -113,6 +133,41 @@ async function postData(url, obj) {
     }
 }
 
-async function updateData(url, obj){
-    
+async function updateData(url, id, obj){
+    try {
+        const response = await fetch(url + `/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type':  'application/json' 
+            },
+            body: JSON.stringify(obj) 
+        });
+
+        if (response.ok) {
+            alert('Alterado com sucesso.');
+        } else {
+            const errorText = await response.text();
+            throw new Error('Erro ' + response.status + ': ' + errorText);
+        }
+    } catch (err) {
+        alert(err.message);
+    }
+}
+
+async function deleteData(url, id){
+    try {
+        const response = await fetch(url + `/${id}`, {
+            method: 'DELETE'
+        });
+
+        if (response.ok) {
+            alert('Removido com sucesso.');
+        } else {
+            const errorText = await response.text();
+            throw new Error('Erro ' + response.status + ': ' + errorText);
+        }
+    } catch (err) {
+        alert(err.message);
+    }
+        
 }

@@ -10,7 +10,7 @@ import (
 // "log"
 
 type Catalog struct {
-	Id          int    `json:"id"`
+	Id          string `json:"id"`
 	Title       string `json:"title"`
 	Description string `json:"description"`
 	Imglink     string `json:"imgLink"`
@@ -51,6 +51,28 @@ func AddCatalog(catalog Catalog) {
 	fmt.Println("New ID:", id)
 }
 
-// func alterCatalog(catalog Catalog, id int){
+func AlterCatalog(catalog Catalog){
+	query := "UPDATE catalogs SET title = $2, description = $3, imglink = $4 WHERE id = $1;"
+	res, err := DB.Exec(query, catalog.Id, catalog.Title, catalog.Description, catalog.Imglink)
+	if err != nil {
+		panic(err)
+	}
+	count, err := res.RowsAffected()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(count) 
+}
 
-// }
+func DeleteCatalog(id string){
+	query := "DELETE FROM catalogs where id = $1;"
+	res, err := DB.Exec(query, id)
+	if err != nil {
+		panic(err)
+	}
+	count, err := res.RowsAffected()
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(count) 
+}

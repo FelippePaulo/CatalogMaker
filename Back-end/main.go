@@ -95,6 +95,81 @@ func main() {
         fmt.Fprintf(w, "Received JSON data")	
 	})
 
+	// change catalog handler
+	mux.HandleFunc(`/catalog/{id}`, func(w http.ResponseWriter, r *http.Request){
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "PUT, GET, POST, OPTIONS, DELETE")
+		
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		
+		if r.Method == http.MethodOptions {
+			// Handle preflight request
+			w.WriteHeader(http.StatusOK)
+			return
+		}
+		fmt.Println(r.Method + " request")
+
+		//put
+		if r.Method == http.MethodPut {
+			var data map[string]interface{}
+			decoder := json.NewDecoder(r.Body)
+			if err := decoder.Decode(&data); err != nil {
+				http.Error(w, "Failed to decode JSON", http.StatusBadRequest)
+				return
+			}
+			
+			var catalog db.Catalog
+			
+			// Acesse os valores do JSON
+			
+			id := r.PathValue("id")
+
+			catalog.Id = id
+			catalog.Title = data["item1"].(string)
+			catalog.Description = data["item2"].(string)
+			catalog.Imglink = data["item3"].(string)
+
+			db.AlterCatalog(catalog)
+		}
+
+		//delete
+		if r.Method == http.MethodDelete {
+			
+			id := r.PathValue("id")
+			db.DeleteCatalog(id)
+			w.WriteHeader(http.StatusOK)
+			w.Write([]byte("Item deleted successfully"))
+		}
+		
+
+		
+	})
+
+	// delete catalog
+	// mux.HandleFunc("DELETE /catalog/{id}", func(w http.ResponseWriter, r *http.Request){
+	// 	 // Handle CORS
+	// 	 w.Header().Set("Access-Control-Allow-Origin", "*")
+	// 	 w.Header().Set("Access-Control-Allow-Methods", "DELETE, OPTIONS")
+	// 	 w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	 
+	// 	 // Handle preflight requests
+	// 	 if r.Method == http.MethodOptions {
+	// 		 w.WriteHeader(http.StatusOK)
+	// 		 return
+	// 	 }
+	 
+	// 	 // Handle DELETE request
+	// 	 if r.Method == http.MethodDelete {
+	// 		 fmt.Println("DELETE request")
+	// 		 // Add your logic to handle the DELETE request here
+	// 		 w.WriteHeader(http.StatusOK)
+	// 		 w.Write([]byte("Item deleted successfully"))
+	// 	 } else {
+	// 		 w.WriteHeader(http.StatusMethodNotAllowed)
+	// 		 w.Write([]byte("Method not allowed"))
+	// 	 }
+	// })
+
 	// catalog list
 	mux.HandleFunc("GET /catalog", func(w http.ResponseWriter, r *http.Request){
 		w.Header().Set("Content-Type", "application/json")
