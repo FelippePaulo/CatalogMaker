@@ -98,8 +98,7 @@ func main() {
 	// change catalog handler
 	mux.HandleFunc(`/catalog/{id}`, func(w http.ResponseWriter, r *http.Request){
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "PUT, GET, POST, OPTIONS, DELETE")
-		
+		w.Header().Set("Access-Control-Allow-Methods", "PUT, OPTIONS, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 		
 		if r.Method == http.MethodOptions {
@@ -108,8 +107,15 @@ func main() {
 			return
 		}
 		fmt.Println(r.Method + " request")
+			
+	})
 
-		//put
+	// put req catalog
+	mux.HandleFunc(`PUT /catalog/{id}`, func(w http.ResponseWriter, r *http.Request){
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		w.Header().Set("Access-Control-Allow-Methods", "PUT, OPTIONS, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+
 		if r.Method == http.MethodPut {
 			var data map[string]interface{}
 			decoder := json.NewDecoder(r.Body)
@@ -132,43 +138,27 @@ func main() {
 			db.AlterCatalog(catalog)
 		}
 
-		//delete
-		if r.Method == http.MethodDelete {
-			
+	})
+
+	// delete catalog
+	mux.HandleFunc("DELETE /catalog/{id}", func(w http.ResponseWriter, r *http.Request){
+		 // Handle CORS
+		 w.Header().Set("Access-Control-Allow-Origin", "*")
+		 w.Header().Set("Access-Control-Allow-Methods", "DELETE, OPTIONS")
+		 w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
+	 
+		 // Handle DELETE request
+		 if r.Method == http.MethodDelete {
+			fmt.Println("DELETE request")
 			id := r.PathValue("id")
 			db.DeleteCatalog(id)
 			w.WriteHeader(http.StatusOK)
 			w.Write([]byte("Item deleted successfully"))
-		}
-		
-
-		
+		 } else {
+			 w.WriteHeader(http.StatusMethodNotAllowed)
+			 w.Write([]byte("Method not allowed"))
+		 }
 	})
-
-	// delete catalog
-	// mux.HandleFunc("DELETE /catalog/{id}", func(w http.ResponseWriter, r *http.Request){
-	// 	 // Handle CORS
-	// 	 w.Header().Set("Access-Control-Allow-Origin", "*")
-	// 	 w.Header().Set("Access-Control-Allow-Methods", "DELETE, OPTIONS")
-	// 	 w.Header().Set("Access-Control-Allow-Headers", "Content-Type")
-	 
-	// 	 // Handle preflight requests
-	// 	 if r.Method == http.MethodOptions {
-	// 		 w.WriteHeader(http.StatusOK)
-	// 		 return
-	// 	 }
-	 
-	// 	 // Handle DELETE request
-	// 	 if r.Method == http.MethodDelete {
-	// 		 fmt.Println("DELETE request")
-	// 		 // Add your logic to handle the DELETE request here
-	// 		 w.WriteHeader(http.StatusOK)
-	// 		 w.Write([]byte("Item deleted successfully"))
-	// 	 } else {
-	// 		 w.WriteHeader(http.StatusMethodNotAllowed)
-	// 		 w.Write([]byte("Method not allowed"))
-	// 	 }
-	// })
 
 	// catalog list
 	mux.HandleFunc("GET /catalog", func(w http.ResponseWriter, r *http.Request){
@@ -190,7 +180,7 @@ func main() {
 	
 	})
 
-	mux.HandleFunc("GET /catalog/{id}", func(w http.ResponseWriter, r *http.Request){
+	mux.HandleFunc("GET /catalog/{id}/produto", func(w http.ResponseWriter, r *http.Request){
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin" , "*")
 		id := r.PathValue("id")

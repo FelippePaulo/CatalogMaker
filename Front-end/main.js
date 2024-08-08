@@ -79,7 +79,7 @@ function loadProducts(id){
     products = document.createElement("div")
     productContainer.removeChild(productContainer.firstChild)
     productContainer.appendChild(products)
-    getData(`http://localhost:8080/catalog/${id}`).then((result) => {
+    getData(`http://localhost:8080/catalog/${id}/produto`).then((result) => {
         result.forEach(product => {
             console.log(product)
             divProduct = document.createElement("div")
