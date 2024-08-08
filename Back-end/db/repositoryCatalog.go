@@ -61,7 +61,7 @@ func AlterCatalog(catalog Catalog){
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(count) 
+	fmt.Println("Rows changed: ", count, " id: ", catalog.Id) 
 }
 
 func DeleteCatalog(id string){
@@ -74,5 +74,5 @@ func DeleteCatalog(id string){
 	if err != nil {
 		panic(err)
 	}
-	fmt.Println(count) 
+	fmt.Println("Rows changed: ", count, " id: ", id) 
 }

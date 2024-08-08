@@ -106,14 +106,12 @@ func main() {
 			w.WriteHeader(http.StatusOK)
 			return
 		}
-		fmt.Println(r.Method + " request")
-			
 	})
 
 	// put req catalog
 	mux.HandleFunc(`PUT /catalog/{id}`, func(w http.ResponseWriter, r *http.Request){
 		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Access-Control-Allow-Methods", "PUT, OPTIONS, DELETE")
+		w.Header().Set("Access-Control-Allow-Methods", "PUT")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
 		if r.Method == http.MethodPut {
@@ -124,9 +122,7 @@ func main() {
 				return
 			}
 			
-			var catalog db.Catalog
-			
-			// Acesse os valores do JSON
+			var catalog db.Catalog 
 			
 			id := r.PathValue("id")
 
@@ -180,6 +176,7 @@ func main() {
 	
 	})
 
+	// prduct list
 	mux.HandleFunc("GET /catalog/{id}/produto", func(w http.ResponseWriter, r *http.Request){
 		w.Header().Set("Content-Type", "application/json")
 		w.Header().Set("Access-Control-Allow-Origin" , "*")
